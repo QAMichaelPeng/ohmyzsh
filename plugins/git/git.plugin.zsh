@@ -1,5 +1,12 @@
 # Git version checking
+# is-at-least: https://github.com/zsh-users/zsh/blob/master/Functions/Misc/is-at-least
+# autoload: https://stackoverflow.com/questions/30840651/what-does-autoload-do-in-zsh
 autoload -Uz is-at-least
+
+# parameter expansion
+# https://zsh.sourceforge.io/Doc/Release/Expansion.html
+# s:string: force field splitting at the separator string
+# A: Convert the substitution into an array expression, even if it otherwise would be scalar. 
 git_version="${${(As: :)$(git version 2>/dev/null)}[3]}"
 
 #
@@ -15,11 +22,14 @@ function current_branch() {
 }
 
 # Pretty log messages
+# if first arg is given, took it as a pretty format spec
 function _git_log_prettily(){
+# https://www.gnu.org/software/bash/manual/html_node/Bash-Conditional-Expressions.html
   if ! [ -z $1 ]; then
     git log --pretty=$1
   fi
 }
+# https://github.com/zsh-users/zsh-completions/blob/master/zsh-completions-howto.org
 compdef _git _git_log_prettily=git-log
 
 # Warn if the current branch is a WIP
